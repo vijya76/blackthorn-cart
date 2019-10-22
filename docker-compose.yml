@@ -1,0 +1,46 @@
+version: "3.5"
+
+volumes:
+  postgres-data:
+
+services:
+  # envoy:
+  #   image: envoyproxy/envoy:latest
+  #   command:
+  #     - /usr/local/bin/envoy
+  #     - -c
+  #     - /etc/envoy/envoy.yaml
+  #   volumes:
+  #     - ${PWD}/envoy/front-envoy.yaml:/etc/envoy/envoy.yaml
+  #     - ${PWD}/envoy/get-certs/pem/fullchain.pem:/etc/envoy.crt
+  #     - ${PWD}/envoy/get-certs/pem/privkey.pem:/etc/envoy.key
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #     - "9901:9901"
+
+  postgres:
+    image: postgres
+    env_file:
+      - ./envs/postgres.env
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: always
+
+  backend:
+    image: backend:0.0.1
+    build:
+      context: app
+      args:
+        - NODE_ENV=development
+    command: ["make", "dev_server"]
+    volumes:
+      - /opt/node_modules
+      - ./app:/opt
+    ports:
+      - 9229:9229
+      - 8080:8080
+    env_file:
+      - ./envs/backend.env
+      - ./envs/postgres.env
+    restart: always

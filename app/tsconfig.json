@@ -1,0 +1,30 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "lib": [
+      "es2017"
+    ],
+    "baseUrl": "./",
+    "outDir": "./dist/",
+    "declaration": true,
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noImplicitAny": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "src/**/*.ts",
+    "./*.ts",
+    "ormconfig.js"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

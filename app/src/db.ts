@@ -10,16 +10,21 @@ const addRecord = async (requestData: any): Promise<object> => {
   return connection.manager.save(product)
 }
 
+const getRecordById = async (id: any) => {
+  const connection = await getConnection()
+  const repository = await connection.getRepository(Product)
+  const row = await repository.findOne(id)
+  return row
+}
+
 const getRecord = async () => {
   const connection = await getConnection()
-
   const repository = await connection.getRepository(Product)
   const [rows, totalCount] = await repository.findAndCount({
     order: { created_at: 'DESC' },
     take: 1
   })
-
   return [rows, totalCount]
 }
 
-export { addRecord, getRecord }
+export { addRecord, getRecord, getRecordById }

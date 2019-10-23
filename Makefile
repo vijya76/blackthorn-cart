@@ -110,10 +110,13 @@ build-all-docker-images:
 init-db:
 	@docker-compose up -d postgres
 
+init-redis:
+	@docker-compose up -d redis
+
 set-up-db-%:
 	docker-compose run --rm $* make set-up-db
 
-set-up-db: init-db set-up-db-backend
+set-up-db: init-db init-redis set-up-db-backend
 
 start-dependencies:
 	@docker-compose up -d postgres

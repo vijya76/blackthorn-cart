@@ -3,13 +3,13 @@ import { Cart } from '../entity/cart'
 import { Item } from 'src/entity/item'
 
 export class CartService {
-  async getAllCarts () {
+  async getAllCarts (pageno: number) {
     // get cart repository and find all carts
-    const cart = await getManager().getRepository(Cart).find()
+    const cart = await getManager().getRepository(Cart).find({ skip: (pageno - 1) * 5, take: 5 })
     for (var k in cart) {
       cart[k].items = await getManager()
         .createQueryBuilder()
-        .cache(60000)
+        .cache(180)
         .relation(Cart, 'items')
         .of(cart[k]) // you can use just cart id as well
         .loadMany()
@@ -29,7 +29,7 @@ export class CartService {
     const cart = await getManager().getRepository(Cart).findOne(cartId)
     cart.items = await getManager()
       .createQueryBuilder()
-      .cache(60000)
+      .cache(180)
       .relation(Cart, 'items')
       .of(cart) // you can use just cart id as well
       .loadMany()
@@ -56,12 +56,10 @@ export class CartService {
       if (items[itemIndex].quantity > 1) {
         items[itemIndex].quantity -= 1
       } else {
-        console.log('splicing')
         items.splice(itemIndex, 1)
       }
     }
     cart.items = items
-    console.log('cart items ::::::::::::', items)
     return cart
   }
 

@@ -84,7 +84,7 @@ export let fetchCart = async (req: Request, res: Response) => {
     if (req.params.cart_id != undefined) {
       result = await cartRepo.getCartById(req.params.cart_id)
     } else {
-      result = await cartRepo.getAllCarts()
+      result = await cartRepo.getAllCarts(req.query.page)
     }
 
     baseResponse.isSuccess = true

@@ -2,8 +2,8 @@ import { getManager } from 'typeorm'
 import { Item } from '../entity/item'
 
 export class ItemService {
-  async getAllItems () {
-    const items = await getManager().getRepository(Item).find()
+  async getAllItems (pageno: number) {
+    const items = await getManager().getRepository(Item).find({ skip: (pageno - 1) * 5, take: 5 })
     for (var k in items) {
       items[k].categories = await getManager()
         .createQueryBuilder()

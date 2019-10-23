@@ -48,7 +48,8 @@ export let fetchItem = async (req: Request, res: Response) => {
     if (req.params.item_id != undefined) {
       result = await itemRepo.getItemById(req.params.item_id)
     } else {
-      result = await itemRepo.getAllItems()
+      console.log(req.query)
+      result = await itemRepo.getAllItems(req.query.page)
       // for (var k in result) {
       //   let item = new Item()
       //   item.item_id = result[k].item_id

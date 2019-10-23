@@ -20,6 +20,7 @@ export class Item {
   @Column({ type: 'double precision', default: 10.0 })
   public price: number
 
+<<<<<<< Updated upstream
   @Column({ type: 'double precision', default: 0.0 })
   public tax: number
 
@@ -27,6 +28,12 @@ export class Item {
   public discount: number
 
   @Column({ type: 'double precision', default: 1.0 })
+=======
+  @Column({ type: 'double precision', default: 10.0 })
+  public discount: number
+
+  @Column({ type: 'double precision', default: 10.0 })
+>>>>>>> Stashed changes
   public quantity: number
 
   @ManyToMany(type => Category)

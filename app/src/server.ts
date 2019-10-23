@@ -7,6 +7,10 @@ import { Item } from './entity/item'
 import { addRecord } from './db'
 
 import initRoutes from './routes/index'
+import { Category } from './entity/category'
+import { Stock } from './entity/stock'
+import { Cart } from './entity/cart'
+
 const app = express()
 const PORT = config.get('app.port')
 
@@ -16,7 +20,7 @@ app.use(express.json());
   // for establish connection with database
   let typeormConnection = await createConnection({
     ...baseConfig,
-    entities: [Item]
+    entities: [Item, Category, Stock, Cart]
   })
 
   await addRecord({})

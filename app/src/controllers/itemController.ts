@@ -16,6 +16,7 @@ export let saveItem = async (req: Request, res: Response) => {
   let baseResponse: BaseResponse = new BaseResponse()
 
   try {
+    itemEntity.item_id = req.body.item_id
     itemEntity.name = req.body.name
     itemEntity.price = req.body.price
     itemEntity.categories = req.body.categories

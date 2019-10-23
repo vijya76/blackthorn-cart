@@ -2,9 +2,17 @@ import { getManager } from 'typeorm'
 import { Item } from '../entity/item'
 
 export class ItemService {
-  getAllItems () {
-    // get item repository and find all items
-    return getManager().getRepository(Item).find()
+  async getAllItems () {
+    const items = await getManager().getRepository(Item).find()
+    for (var k in items) {
+      items[k].categories = await getManager()
+        .createQueryBuilder()
+        .cache(60000)
+        .relation(Item, 'categories')
+        .of(items[k])
+        .loadMany()
+    }
+    return items
   }
 
   saveItem (item: Item) {
@@ -15,7 +23,14 @@ export class ItemService {
     return getManager().getRepository(Item).remove(item)
   }
 
-  getItemById (itemId: number) {
-    return getManager().getRepository(Item).findOne(itemId)
+  async getItemById (itemId: number) {
+    const item = await getManager().getRepository(Item).findOne(itemId)
+    item.categories = await getManager()
+      .createQueryBuilder()
+      .cache(60000)
+      .relation(Item, 'categories')
+      .of(item)
+      .loadMany()
+    return item
   }
 }

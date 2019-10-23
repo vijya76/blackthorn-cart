@@ -4,7 +4,7 @@ import { Category } from '../entity/category'
 export class CategoryService {
   getAllCategorys () {
     // get category repository and find all categorys
-    return getManager().getRepository(Category).find()
+    return getManager().getRepository(Category).find({ cache: 60000 })
   }
 
   saveCategory (category: Category) {
@@ -16,6 +16,6 @@ export class CategoryService {
   }
 
   getCategoryById (categoryId: number) {
-    return getManager().getRepository(Category).findOne(categoryId)
+    return getManager().getRepository(Category).findOne({ where: { 'category_id': categoryId }, cache: 60000 })
   }
 }

@@ -2,6 +2,7 @@ version: "3.5"
 
 volumes:
   postgres-data:
+  redis-data:
 
 services:
   # envoy:
@@ -43,4 +44,11 @@ services:
     env_file:
       - ./envs/backend.env
       - ./envs/postgres.env
+    restart: always
+
+  redis:
+    image: redis
+    command: ['redis-server', '--appendonly', 'yes']
+    volumes:
+      - redis-data:/data
     restart: always

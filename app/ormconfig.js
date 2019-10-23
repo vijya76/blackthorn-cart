@@ -9,7 +9,14 @@ const baseConfig = {
   'database': config.get('db.name'),
   'logging': false,
   'synchronize': false,
-  'migrationsRun': false
+  'migrationsRun': false,
+  'cache': {
+    'type': 'redis',
+    'options': {
+      'host': 'redis',
+      'port': 6379
+    }
+  }
 }
 
 module.exports = {

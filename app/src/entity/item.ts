@@ -20,6 +20,15 @@ export class Item {
   @Column({ type: 'double precision', default: 10.0 })
   public price: number
 
+  @Column({ type: 'double precision', default: 0.0 })
+  public tax: number
+
+  @Column({ type: 'double precision', default: 0.0 })
+  public discount: number
+
+  @Column({ type: 'double precision', default: 1.0 })
+  public quantity: number
+
   @ManyToMany(type => Category)
   @JoinTable()
   categories: Category[];

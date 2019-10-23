@@ -35,7 +35,7 @@ export let addItem = async (req: Request, res: Response) => {
   let baseResponse: BaseResponse = new BaseResponse()
 
   try {
-    cartEntity.cart_id = req.body.cart_id
+    cartEntity = await cartRepo.getCartById(req.body.cart_id)
     cartRepo.addItem(cartEntity, req.body.item)
     cartEntity = cartRepo.updateCart(cartEntity)
     let result = await cartRepo.saveCart(cartEntity)
@@ -58,7 +58,7 @@ export let removeItem = async (req: Request, res: Response) => {
   let baseResponse: BaseResponse = new BaseResponse()
 
   try {
-    cartEntity.cart_id = req.body.cart_id
+    cartEntity = await cartRepo.getCartById(req.body.cart_id)
     cartRepo.removeItem(cartEntity, req.body.item)
     cartEntity = cartRepo.updateCart(cartEntity)
     let result = await cartRepo.saveCart(cartEntity)

@@ -3,9 +3,18 @@ import { Cart } from '../entity/cart'
 import { Item } from 'src/entity/item'
 
 export class CartService {
-  getAllCarts () {
+  async getAllCarts () {
     // get cart repository and find all carts
-    return getManager().getRepository(Cart).find()
+    const cart = await getManager().getRepository(Cart).find()
+    for (var k in cart) {
+      cart[k].items = await getManager()
+        .createQueryBuilder()
+        .cache(60000)
+        .relation(Cart, 'items')
+        .of(cart[k]) // you can use just cart id as well
+        .loadMany()
+    }
+    return cart
   }
 
   saveCart (cart: Cart) {
@@ -16,8 +25,15 @@ export class CartService {
     return getManager().getRepository(Cart).remove(cart)
   }
 
-  getCartById (cartId: number) {
-    return getManager().getRepository(Cart).findOne(cartId)
+  async getCartById (cartId: number) {
+    const cart = await getManager().getRepository(Cart).findOne(cartId)
+    cart.items = await getManager()
+      .createQueryBuilder()
+      .cache(60000)
+      .relation(Cart, 'items')
+      .of(cart) // you can use just cart id as well
+      .loadMany()
+    return cart
   }
 
   addItem (cart: Cart, item: Item) {
@@ -29,6 +45,7 @@ export class CartService {
       items.push(item)
     }
     cart.items = items
+
     return cart
   }
 
@@ -36,11 +53,15 @@ export class CartService {
     let items = cart.items
     let itemIndex = items.findIndex(obj => obj.item_id === item.item_id)
     if (itemIndex != -1) {
-      items[itemIndex].quantity += 1
-    } else {
-      items.push(item)
+      if (items[itemIndex].quantity > 1) {
+        items[itemIndex].quantity -= 1
+      } else {
+        console.log('splicing')
+        items.splice(itemIndex, 1)
+      }
     }
     cart.items = items
+    console.log('cart items ::::::::::::', items)
     return cart
   }
 
@@ -51,14 +72,22 @@ export class CartService {
     return cart
   }
   calculateTotal (cart: Cart) {
-    cart.total = (cart.subtotal - cart.discounts) + cart.subtotal * cart.tax * 0.01
+    cart.total = (cart.subtotal - cart.discounts) + cart.tax
     return cart
   }
 
   calculateDiscounts (cart: Cart) {
     let items = cart.items
     items.forEach(item => {
-      cart.discounts += item.price * item.discount * 0.01
+      cart.discounts += (item.price * item.discount * 0.01) * item.quantity
+    })
+    return cart
+  }
+
+  calculateTaxes (cart: Cart) {
+    let items = cart.items
+    items.forEach(item => {
+      cart.tax += (item.price * item.tax * 0.01) * item.quantity
     })
     return cart
   }
@@ -66,7 +95,7 @@ export class CartService {
   calculateSubTotal (cart: Cart) {
     let items = cart.items
     items.forEach(item => {
-      cart.subtotal += item.price
+      cart.subtotal += item.price * item.quantity
     })
     return cart
   }

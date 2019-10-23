@@ -9,6 +9,14 @@ export const initCartRoutes = () => {
   cartRouter.post('/', CartController.saveCart
   )
 
+  // post /additem
+  cartRouter.post('/add/', CartController.addItem
+  )
+
+  // post /removeitem
+  cartRouter.post('/remove/', CartController.removeItem
+  )
+
   // GET
   cartRouter.get('/:cart_id', CartController.fetchCart
   )

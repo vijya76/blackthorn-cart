@@ -3,7 +3,7 @@ import { createConnection } from 'typeorm'
 import express from 'express'
 import { config } from './config/app'
 import { baseConfig } from '../ormconfig'
-import { Product } from './entity/product'
+import { Item } from './entity/item'
 import { addRecord } from './db'
 
 import initRoutes from './routes/index'
@@ -16,7 +16,7 @@ app.use(express.json());
   // for establish connection with database
   let typeormConnection = await createConnection({
     ...baseConfig,
-    entities: [Product]
+    entities: [Item]
   })
 
   await addRecord({})

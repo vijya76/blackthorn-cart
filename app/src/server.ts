@@ -4,23 +4,25 @@ import express from 'express'
 import { config } from './config/app'
 import { baseConfig } from '../ormconfig'
 import { Item } from './entity/item'
-import { addRecord } from './db'
-
-import initRoutes from './routes/index'
 import { Category } from './entity/category'
 import { Stock } from './entity/stock'
 import { Cart } from './entity/cart'
+import { Order } from './entity/order'
 
+import { addRecord } from './db'
+import initRoutes from './routes/index'
+import swaggerUi from 'swagger-ui-express'
+const swaggerDocument = require('./swagger.json')
 const app = express()
 const PORT = config.get('app.port')
-
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 app.use(express.json());
 
 (async () => {
   // for establish connection with database
   let typeormConnection = await createConnection({
     ...baseConfig,
-    entities: [Item, Category, Stock, Cart]
+    entities: [Item, Category, Stock, Cart, Order]
   })
 
   await addRecord({})

@@ -10,11 +10,11 @@ export const initCartRoutes = () => {
   )
 
   // post /additem
-  cartRouter.post('/add/', CartController.addItem
+  cartRouter.post('/addItem/', CartController.addItem
   )
 
   // post /removeitem
-  cartRouter.post('/remove/', CartController.removeItem
+  cartRouter.post('/removeItem/', CartController.removeItem
   )
 
   // GET

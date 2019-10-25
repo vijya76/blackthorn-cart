@@ -4,6 +4,7 @@ import { BaseResponse } from '../base-response'
 import { Item } from '../entity/item'
 import { StockService } from '../services/stockService'
 import { Stock } from '../entity/stock'
+import { Boom } from '@hapi/boom'
 
 /**
  * POST /
@@ -30,8 +31,9 @@ export let saveItem = async (req: Request, res: Response) => {
     baseResponse.response = result
   } catch (e) {
     baseResponse.isSuccess = false
-    baseResponse.response = JSON.stringify(e)
+    baseResponse.response = e
   }
+
   res.send(baseResponse)
 }
 
@@ -42,28 +44,30 @@ export let saveItem = async (req: Request, res: Response) => {
 export let fetchItem = async (req: Request, res: Response) => {
   let itemRepo = new ItemService()
   let baseResponse: BaseResponse = new BaseResponse()
-
+  let responseCode
   try {
     let result
     if (req.params.item_id != undefined) {
       result = await itemRepo.getItemById(req.params.item_id)
+      if (result.length > 0) {
+        responseCode = 200
+      } else {
+        responseCode = 400
+      }
     } else {
       console.log(req.query)
-      result = await itemRepo.getAllItems(req.query.page)
-      // for (var k in result) {
-      //   let item = new Item()
-      //   item.item_id = result[k].item_id
-      //   itemRepo.deleteItem(item)
-      // }
+      result = await itemRepo.getAllItems(req.query.page, req.query.name, req.query.category)
+      responseCode = 200
     }
 
     baseResponse.isSuccess = true
     baseResponse.response = result
   } catch (e) {
+    responseCode = 400
     baseResponse.isSuccess = false
-    baseResponse.response = JSON.stringify(e)
+    baseResponse.response = e
   }
-  res.send(baseResponse)
+  res.send(responseCode, baseResponse)
 }
 
 /**
@@ -88,7 +92,7 @@ export let deleteItem = async (req: Request, res: Response) => {
     baseResponse.response = result
   } catch (e) {
     baseResponse.isSuccess = false
-    baseResponse.response = JSON.stringify(e)
+    baseResponse.response = e
   }
   res.send(baseResponse)
 }

@@ -11,20 +11,30 @@ export let saveCategory = async (req: Request, res: Response) => {
   let categoryRepo = new CategoryService()
   let categoryEntity: Category = new Category()
   let baseResponse: BaseResponse = new BaseResponse()
-
   try {
     categoryEntity.category_id = req.body.category_id
-    categoryEntity.name = req.body.name
-    categoryEntity.taxes = req.body.taxes
-    let result = await categoryRepo.saveCategory(categoryEntity)
+
+    if (req.body.name != undefined) {
+      categoryEntity.name = req.body.name
+      if (req.body.taxes != undefined) {
+        categoryEntity.taxes = req.body.taxes
+        baseResponse.response = await categoryRepo.saveCategory(categoryEntity)
+        baseResponse.responseCode = 200
+      } else {
+        baseResponse.responseCode = 400
+        baseResponse.message = 'Enter valid name'
+      }
+    } else {
+      baseResponse.responseCode = 400
+      baseResponse.message = 'Enter valid name'
+    }
 
     baseResponse.isSuccess = true
-    baseResponse.response = result
   } catch (e) {
     baseResponse.isSuccess = false
-    baseResponse.response = JSON.stringify(e)
+    baseResponse.response = e
   }
-  res.send(baseResponse)
+  res.send(baseResponse.responseCode, baseResponse)
 }
 
 /**
@@ -34,22 +44,28 @@ export let saveCategory = async (req: Request, res: Response) => {
 export let fetchCategory = async (req: Request, res: Response) => {
   let categoryRepo = new CategoryService()
   let baseResponse: BaseResponse = new BaseResponse()
-
+  let result, responseCode
   try {
-    let result
+    baseResponse.isSuccess = true
     if (req.params.category_id != undefined) {
       result = await categoryRepo.getCategoryById(req.params.category_id)
+      if (result.length <= 0) {
+        responseCode = 400
+        baseResponse.isSuccess = false
+      } else {
+        responseCode = 200
+      }
     } else {
       result = await categoryRepo.getAllCategorys()
+      responseCode = 200
     }
-
-    baseResponse.isSuccess = true
     baseResponse.response = result
   } catch (e) {
     baseResponse.isSuccess = false
-    baseResponse.response = JSON.stringify(e)
+    baseResponse.response = e
+    responseCode = 400
   }
-  res.send(baseResponse)
+  res.send(responseCode, baseResponse)
 }
 
 /**
@@ -59,18 +75,22 @@ export let fetchCategory = async (req: Request, res: Response) => {
 export let deleteCategory = async (req: Request, res: Response) => {
   let categoryRepo = new CategoryService()
   let baseResponse: BaseResponse = new BaseResponse()
-
+  let result, responseCode
+  baseResponse.isSuccess = true
   try {
-    let result
-    // if (req.params.category_id != undefined) {
-    result = await categoryRepo.deleteCategory(req.body)
-    // }
+    if (req.body.category_id != undefined) {
+      result = await categoryRepo.deleteCategory(req.body)
+      responseCode = 200
+    } else {
+      responseCode = 400
+      baseResponse.isSuccess = false
+    }
 
-    baseResponse.isSuccess = true
     baseResponse.response = result
   } catch (e) {
+    responseCode = 400
     baseResponse.isSuccess = false
-    baseResponse.response = JSON.stringify(e)
+    baseResponse.response = e
   }
-  res.send(baseResponse)
+  res.send(responseCode, baseResponse)
 }

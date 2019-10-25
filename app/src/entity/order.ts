@@ -3,13 +3,11 @@ import {
   Column,
   Entity,
   CreateDateColumn,
-  UpdateDateColumn,
-  ManyToMany,
-  JoinTable
+  UpdateDateColumn
 } from 'typeorm'
 
-@Entity({ name: 'order' })
-export class Order {
+@Entity({ name: 'orders' })
+export class Orders {
   @PrimaryGeneratedColumn('uuid')
   public order_id: string
 

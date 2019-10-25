@@ -3,6 +3,6 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "postinstall": "cd app && npm install",
+    "postinstall": "cd app && npm install"
   }
 }

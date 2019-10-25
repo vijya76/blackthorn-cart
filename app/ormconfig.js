@@ -10,11 +10,11 @@ const baseConfig = {
   'logging': false,
   'synchronize': false,
   'migrationsRun': false,
+  'ssl': true,
   'cache': {
     'type': 'redis',
     'options': {
-      'host': 'redis',
-      'port': 6379
+      'url': config.get('redis.url')
     }
   }
 }

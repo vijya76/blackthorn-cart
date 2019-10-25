@@ -67,6 +67,16 @@ const config = convict({
     }
   },
 
+  redis: {
+    url: {
+      doc: 'REDIS url',
+      format: String,
+      default: '',
+      env: 'REDIS_URL',
+      sensitive: true
+    }
+  },
+
   logger: {
     level: {
       doc: 'Log level',

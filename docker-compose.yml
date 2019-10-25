@@ -5,28 +5,13 @@ volumes:
   redis-data:
 
 services:
-  # envoy:
-  #   image: envoyproxy/envoy:latest
-  #   command:
-  #     - /usr/local/bin/envoy
-  #     - -c
-  #     - /etc/envoy/envoy.yaml
+  # postgres:
+  #   image: postgres
+  #   env_file:
+  #     - ./envs/postgres.env
   #   volumes:
-  #     - ${PWD}/envoy/front-envoy.yaml:/etc/envoy/envoy.yaml
-  #     - ${PWD}/envoy/get-certs/pem/fullchain.pem:/etc/envoy.crt
-  #     - ${PWD}/envoy/get-certs/pem/privkey.pem:/etc/envoy.key
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #     - "9901:9901"
-
-  postgres:
-    image: postgres
-    env_file:
-      - ./envs/postgres.env
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    restart: always
+  #     - postgres-data:/var/lib/postgresql/data
+  #   restart: always
 
   backend:
     image: backend:0.0.1
@@ -44,11 +29,12 @@ services:
     env_file:
       - ./envs/backend.env
       - ./envs/postgres.env
+      - ./envs/redis.env
     restart: always
 
-  redis:
-    image: redis
-    command: ['redis-server', '--appendonly', 'yes']
-    volumes:
-      - redis-data:/data
-    restart: always
+  # redis:
+  #   image: redis
+  #   command: ['redis-server', '--appendonly', 'yes']
+  #   volumes:
+  #     - redis-data:/data
+  #   restart: always

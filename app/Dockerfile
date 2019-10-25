@@ -26,4 +26,4 @@ COPY . /opt
 RUN make build
 EXPOSE 8080 9229
 
-CMD make dev_server
+CMD make migrate-db && make start_server

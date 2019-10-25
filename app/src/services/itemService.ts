@@ -1,9 +1,9 @@
 import { getManager, Like } from 'typeorm'
 import { Item } from '../entity/item'
-import { Category } from 'src/entity/category'
+import { Category } from '../entity/category'
 
 export class ItemService {
-  async getAllItems (pageno: number, name: string, category: string) {
+  async getAllItems(pageno: number, name: string, category: string) {
     let items
     if (name != null || name != undefined || category != null || category != undefined) {
       if (name != null || name != undefined) {
@@ -28,15 +28,15 @@ export class ItemService {
     return items
   }
 
-  saveItem (item: Item) {
+  saveItem(item: Item) {
     return getManager().getRepository(Item).save(item)
   }
 
-  deleteItem (item: Item) {
+  deleteItem(item: Item) {
     return getManager().getRepository(Item).remove(item)
   }
 
-  async getItemById (itemId: number) {
+  async getItemById(itemId: number) {
     const item = await getManager().getRepository(Item).findOne(itemId)
     item.categories = await getManager()
       .createQueryBuilder()

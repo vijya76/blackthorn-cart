@@ -107,16 +107,16 @@ install-docker-if-not-already-installed:
 build-all-docker-images:
 	@docker-compose build --force-rm
 
-init-db:
-	@docker-compose up -d postgres
+# init-db:
+# 	@docker-compose up -d postgres
 
-init-redis:
-	@docker-compose up -d redis
+# init-redis:
+# 	@docker-compose up -d redis
 
 set-up-db-%:
 	docker-compose run --rm $* make set-up-db
 
-set-up-db: init-db init-redis set-up-db-backend
+set-up-db: set-up-db-backend
 
 start-dependencies:
 	@docker-compose up -d postgres

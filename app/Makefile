@@ -1,6 +1,6 @@
 # Database Functions
 export PGPASSWORD ?= $(DB_PASSWORD)
-export DB_ENTRY ?= psql -h $(DB_HOST) -p $(DB_PORT) -U $(DB_USER)
+export DB_ENTRY ?= psql -h $(DB_HOST) -d $(DB_NAME) -p $(DB_PORT) -U $(DB_USER)
 
 wait-for-postgres:
 	while ! nc -zv ${DB_HOST} ${DB_PORT}; do echo waiting for postgresql ..; sleep 1; done;

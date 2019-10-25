@@ -38,14 +38,15 @@ export class CartService {
 
   addItem (cart: Cart, item: Item) {
     let items = cart.items
-    let itemIndex = items.findIndex(obj => obj.item_id === item.item_id)
+    let itemIndex = items.findIndex(obj => obj.item_id == item.item_id)
     if (itemIndex != -1) {
+      console.log('adding')
       items[itemIndex].quantity += 1
     } else {
       items.push(item)
     }
     cart.items = items
-
+    console.log('cart.items : ', cart.items)
     return cart
   }
 

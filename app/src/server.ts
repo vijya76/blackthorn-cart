@@ -7,7 +7,7 @@ import { Item } from './entity/item'
 import { Category } from './entity/category'
 import { Stock } from './entity/stock'
 import { Cart } from './entity/cart'
-import { Order } from './entity/order'
+import { Orders } from './entity/orders'
 
 import { addRecord } from './db'
 import initRoutes from './routes/index'
@@ -22,7 +22,7 @@ app.use(express.json());
   // for establish connection with database
   let typeormConnection = await createConnection({
     ...baseConfig,
-    entities: [Item, Category, Stock, Cart, Order]
+    entities: [Item, Category, Stock, Cart, Orders]
   })
 
   await addRecord({})

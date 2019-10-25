@@ -15,7 +15,7 @@ export class StockService {
     return getManager().getRepository(Stock).remove(stock)
   }
 
-  getStockById (stockId: number) {
-    return getManager().getRepository(Stock).findOne(stockId)
+  getStockByItem (itemId: number) {
+    return getManager().getRepository(Stock).find({ where: { item: itemId } })
   }
 }

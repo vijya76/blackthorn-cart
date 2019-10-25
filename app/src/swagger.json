@@ -19,8 +19,8 @@
       "description": "Operations about cart"
     },
     {
-      "name": "order",
-      "description": "Operations about order"
+      "name": "orders",
+      "description": "Operations about orders"
     }
   ],
   "schemes": [
@@ -217,11 +217,52 @@
         "parameters": [
           {
             "in": "body",
-            "name": "body",
-            "description": "Item object that needs to be added to the store",
-            "required": true,
+            "name": "item",
+            "description": "The user to create.",
             "schema": {
-              "$ref": "#/definitions/Item"
+              "type": "object",
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "item_id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "price": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "quantity": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "discount": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "tax": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "stock": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "created_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "categories": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
             }
           }
         ],
@@ -399,17 +440,6 @@
           "application/xml",
           "application/json"
         ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Cart object that needs to be added to the store",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Cart"
-            }
-          }
-        ],
         "responses": {
           "405": {
             "description": "Invalid input"
@@ -569,11 +599,26 @@
         "parameters": [
           {
             "in": "body",
-            "name": "body",
-            "description": "item object that needs to be added to the cart",
-            "required": true,
+            "name": "cart",
             "schema": {
-              "$ref": "#/definitions/Cart"
+              "type": "object",
+              "required": [
+                "cart_id",
+                "item"
+              ],
+              "properties": {
+                "cart_id": {
+                  "type": "string"
+                },
+                "item": {
+                  "type": "object",
+                  "properties": {
+                    "item_id": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
             }
           }
         ],
@@ -608,11 +653,26 @@
         "parameters": [
           {
             "in": "body",
-            "name": "body",
-            "description": "item object that needs to be removed from the cart",
-            "required": true,
+            "name": "cart",
             "schema": {
-              "$ref": "#/definitions/Cart"
+              "type": "object",
+              "required": [
+                "cart_id",
+                "item"
+              ],
+              "properties": {
+                "cart_id": {
+                  "type": "string"
+                },
+                "item": {
+                  "type": "object",
+                  "properties": {
+                    "item_id": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
             }
           }
         ],
@@ -632,10 +692,10 @@
         }
       }
     },
-    "/order": {
+    "/orders": {
       "post": {
         "tags": [
-          "order"
+          "orders"
         ],
         "summary": "Add a new order to the store",
         "description": "",
@@ -651,11 +711,17 @@
         "parameters": [
           {
             "in": "body",
-            "name": "body",
-            "description": "Order object that needs to be added to the store",
-            "required": true,
+            "name": "order",
             "schema": {
-              "$ref": "#/definitions/Order"
+              "type": "object",
+              "required": [
+                "cart_id"
+              ],
+              "properties": {
+                "cart_id": {
+                  "type": "string"
+                }
+              }
             }
           }
         ],
@@ -667,7 +733,7 @@
       },
       "delete": {
         "tags": [
-          "order"
+          "orders"
         ],
         "summary": "Delete an existing order",
         "description": "",
@@ -687,7 +753,7 @@
             "description": "Cart object that needs to be deleted from the store",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Cart"
+              "$ref": "#/definitions/Orders"
             }
           }
         ],
@@ -705,7 +771,7 @@
       },
       "get": {
         "tags": [
-          "order"
+          "orders"
         ],
         "summary": "Get all orders",
         "description": "",
@@ -728,10 +794,10 @@
         }
       }
     },
-    "/order/{order_Id}": {
+    "/orders/{order_Id}": {
       "get": {
         "tags": [
-          "order"
+          "orders"
         ],
         "summary": "Find order by ID",
         "description": "Returns a single order",
@@ -753,7 +819,7 @@
           "200": {
             "description": "successful operation",
             "schema": {
-              "$ref": "#/definitions/Order"
+              "$ref": "#/definitions/Orders"
             }
           },
           "400": {
@@ -860,7 +926,7 @@
         "name": "Cart"
       }
     },
-    "Order": {
+    "Orders": {
       "type": "object",
       "properties": {
         "order_id": {
@@ -899,7 +965,7 @@
         }
       },
       "xml": {
-        "name": "Order"
+        "name": "Orders"
       }
     }
   },
